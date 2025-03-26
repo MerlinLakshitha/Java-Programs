@@ -1,0 +1,92 @@
+Key Element : 
+
+class TreeNode1{
+    int value;
+    TreeNode1 left, right;
+
+    TreeNode1(int value) {
+        this.value = value;
+        left = right = null;
+    }
+}
+
+class BinarySearchTree {
+    TreeNode1 root;
+
+    TreeNode1 deleteNode(TreeNode1 root, int key) {
+        if (root == null) {
+            return root; // Tree is empty
+        }
+
+        if (key < root.value) {
+            root.left = deleteNode(root.left, key);
+        } else if (key > root.value) {
+            root.right = deleteNode(root.right, key);
+        } else { 
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            }
+
+            root.value = minValue(root.right); 
+            root.right = deleteNode(root.right, root.value);
+        }
+        return root;
+    }
+
+    int minValue(TreeNode1 root) {
+        int minValue = root.value;
+        while (root.left != null) {
+            root = root.left;
+        }
+        return root.value;
+    }
+
+    TreeNode1 insert(TreeNode1 root, int value) {
+        if (root == null) {
+            root = new TreeNode1(value);
+            return root;
+        }
+
+        if (value < root.value) {
+            root.left = insert(root.left, value); 
+        } else if (value > root.value) {
+            root.right = insert(root.right, value);
+        }
+
+        return root; 
+    }
+
+
+    void inorderTraversal(TreeNode1 root) {
+        if (root != null) {
+            inorderTraversal(root.left); 
+            System.out.print(root.value + " ");
+            inorderTraversal(root.right); 
+        }
+    }
+
+    public static void main(String[] args){
+        BinarySearchTree bst = new BinarySearchTree(); 
+
+        bst.root = bst.insert(bst.root, 50);
+        bst.root = bst.insert(bst.root, 30);
+        bst.root = bst.insert(bst.root, 70);
+        bst.root = bst.insert(bst.root, 20);
+        bst.root = bst.insert(bst.root, 40);
+        bst.root = bst.insert(bst.root, 60);
+        bst.root = bst.insert(bst.root, 80);
+
+        System.out.println("In-order traversal of the BST:");
+        bst.inorderTraversal(bst.root);
+        System.out.println();
+
+        int key = 80;
+        System.out.println("Deleting node with value " + key);
+        bst.root = bst.deleteNode(bst.root, key);
+
+        System.out.println("In-order traversal after deletion:");
+        bst.inorderTraversal(bst.root);
+        System.out.println();
+    }
